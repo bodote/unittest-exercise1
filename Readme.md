@@ -1,15 +1,20 @@
 # Exercise on unit testing and using interfaces for...
-- ... separating logic from the UI
-- and for using mock objects for testing
+- ... separating logic from the UI,
+- for using mock objects for testing,
+- using a "unit test first" approach 
 
-# Task "jmore":
-- implement the core functions of the Unix command line tool "more", with no extras.
+# Idea is..
+..to practice the exercise several times until you can write down a clean solution very fast without googling 
+
+# "jmore":
+- implement the core functions of the Unix command line tool "more" in java, with no extras.
 - it should read a  text from an "InputStream".
 - the "lines per page" are given on initialization 
-- "jmore" should print at most "lines per page" the text lines from the InputStream on the screen
+- if sample text has more lines than "lines_per_page" , then "jmore" should print at most "lines_per_page" the text lines from the InputStream on the screen
 - then wait for a "KeyEvent" 
 - if ESC is pressed, the tool exits
-- if any other key, the screen is cleared an the next "lines per page" are printed on the screen .
+- if any other key, the screen is cleared an the next "lines_per_page" are printed on the screen .
+- an so on until end of input stream is reached
 
 ## Important note on  handling key events: 
 - not possible in plain Java using default library for any text-terminals like Windows "cmd" or Unix "xterm" or "bash"
@@ -20,19 +25,19 @@
 - nevertheless give a text hint at the end of each page, what the user can do, what key does what of if the EOF is reached.
 - DO NOT write a event loop to handle KeyEvents for yourself, use an "event handler" also called a  "call back" method instead. the event loop is internal to JavaFX/Swing/AWT.
 
-# TEST - FIRST !
+# UNIT TEST - FIRST !
 - strictly write the test first , then the implementation. 
 - implement the JavaFX user interface not before all test are complete and running.
 
-# Only use Java default libraries plus JUnit, nothing else
+# Only use Java build-in libraries plus JUnit, nothing else
 
-# Start from command line: 
+# Solution should start from command line like this: 
 - java -cp build/libs/dojo_gradle.jar de.bas.dojo.more.JavaFXFrontEnd2
 
-# Run Tests from command line:
+# Run Tests from command line using gradle:
 - ./gradlew test --rerun-tasks
 
-# Neues Gradle-Projekt in Eclipse
+# New Gradle-Projekt in Eclipse
 New Project -> Gradle Project-> name -> ok
 
 # Hints:
