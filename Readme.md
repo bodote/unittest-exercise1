@@ -1,5 +1,5 @@
-# Exercise on unit tesing and using interfaces for...
-- ... separating locig from the UI
+# Exercise on unit testing and using interfaces for...
+- ... separating logic from the UI
 - and for using mock objects for testing
 
 # Task "jmore":
