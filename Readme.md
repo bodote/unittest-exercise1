@@ -1,20 +1,20 @@
 # Exercise on unit testing and using interfaces for...
 - ... separating logic from the UI,
-- for using mock objects for testing,
-- using a "unit test first" approach 
+- for using a mock objects for testing,
+- using a "unit test first" approach  
 
 # Idea is..
 ..to practice the exercise several times until you can write down a clean solution very fast without googling 
 
-# "jmore":
+# "jmore": 
 - implement the core functions of the Unix command line tool "more" in java, with no extras.
 - it should read a  text from an "InputStream".
 - the "lines per page" are given on initialization 
 - if sample text has more lines than "lines_per_page" , then "jmore" should print at most "lines_per_page" the text lines from the InputStream on the screen
-- then wait for a "KeyEvent" 
+- then wait for a "KeyEvent"  
 - if ESC is pressed, the tool exits
 - if any other key, the screen is cleared an the next "lines_per_page" are printed on the screen .
-- an so on until end of input stream is reached
+- an so on until end of input stream is reached 
 
 ## Important note on  handling key events: 
 - not possible in plain Java using default library for any text-terminals like Windows "cmd" or Unix "xterm" or "bash"
