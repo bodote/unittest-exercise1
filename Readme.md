@@ -58,7 +58,7 @@ private KeyEvent escKeyEvent =
   <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8/">
 		<accessrules>
 			<accessrule kind="accessible" pattern="javafx/**"/>
-		</accessrules>
+		</accessrules> 
 	</classpathentry>
 ```
  - **OR** install Eclipse add-on: "e(fx)clipse"  from  http://www.eclipse.org/efxclipse/install.html 
