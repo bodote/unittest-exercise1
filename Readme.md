@@ -32,7 +32,7 @@
 # Only use Java build-in libraries plus JUnit, nothing else
 
 # Solution should start from command line like this: 
-- java -cp build/libs/dojo_gradle.jar de.bas.dojo.more.JavaFXFrontEnd2
+- java -cp build/libs/unittest-exercise1.jar de.brandad.javatar.JavaFXFrontEnd
 
 # Run Tests from command line using gradle:
 - ./gradlew test --rerun-tasks
