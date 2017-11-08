@@ -22,7 +22,7 @@ public class JavaFXFrontEnd extends Application implements MyOutputHandler{
 		this.primaryStage.show();
 		InputStream inStream = this.getClass().getClassLoader().getResourceAsStream("mytest2.txt");
 		MyMore myMore = new MyMore(inStream,this,3);
-		myMore.printAPage();
+		
 		this.textArea.setOnKeyPressed(myMore::handle);
 		
 	}

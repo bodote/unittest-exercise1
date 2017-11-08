@@ -19,6 +19,7 @@ public class MyMore {
 		this.reader = new BufferedReader(new InputStreamReader(inStream));
 		this.outputHandler = outputHandler;
 		this.linesPerPage = linesPerPage;
+		printAPage();
 	}
 
 	public void printAPage() {

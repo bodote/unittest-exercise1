@@ -46,7 +46,7 @@ public class MoreJTest {
 		}; 
 		
 		MyMore myMore = new MyMore(inStream,mockOutputHandler,1);
-		myMore.printAPage();
+		
 		myMore.handle(escKey);
 		
 		//assertEquals(1,mockOutputHandler.getLinesCounter());
@@ -87,7 +87,7 @@ public class MoreJTest {
 		}; 
 		
 		MyMore myMore = new MyMore(inStream,mockOutputHandler,3);
-		myMore.printAPage();
+	
 		myMore.handle(nonEscKey);
 		
 		myMore.handle(escKey);
