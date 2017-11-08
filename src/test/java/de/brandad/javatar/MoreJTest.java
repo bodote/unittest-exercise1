@@ -1,105 +1,99 @@
 package de.brandad.javatar;
+import static org.junit.Assert.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
+import java.util.ArrayList;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 public class MoreJTest {
-	InputStream inStream;
-	Logger logger = Logger.getLogger(this.getClass().getName());
-	@Before
-	public void setup() {
-		try {
-			LogManager.getLogManager().readConfiguration(this.getClass().getClassLoader().getResourceAsStream("logging.properties"));
-		} catch (SecurityException | IOException e) {
-			logger.severe(e.getMessage());
-		}
-	}
-
-	@Test
-	public void printOneLineThenEscape() {
-		String teststring = "one line12 \n";
-		inStream = new BufferedInputStream(new ByteArrayInputStream(teststring.getBytes()));
-
-		MyMore mymore = new MyMore(inStream, 20, new MyOutputHandler() {
-			int totalLines = 0;
-			int pageCounter = 0;
-
-			@Override
-			public void printLine(String line) {
-				totalLines++;
-			}
-
-			@Override
-			public void close() {
-				assertEquals(2, totalLines); // 2 because "press any key or escape" needs an additional line
-				assertEquals(1, pageCounter);
-			}
-
-			@Override
-			public void clearPage() {
-				pageCounter++;
-			}
-		});
-
-		try {
-			mymore.printAPage();
-			mymore.handle(new KeyEvent(null, teststring, teststring, KeyCode.ESCAPE, false, false, false, false));
-			inStream.close();
-		} catch (IOException e) {
-			fail("exception" + e.getMessage());
-		}
-
-	}
+	KeyEvent escKey = new KeyEvent(null, null, null, null, null, KeyCode.ESCAPE, false, false,false, false);
+    KeyEvent nonEscKey = new KeyEvent(null, null, null, null, null, KeyCode.SPACE, false, false,false, false);
 	
 	@Test
-	public void printThreeLinesOnTwoPagesThenEscape() {
-		String teststring = "one line1 \none line2 \none line3 \n";
-		inStream = new BufferedInputStream(new ByteArrayInputStream(teststring.getBytes()));
-
-		MyMore mymore = new MyMore(inStream, 2, new MyOutputHandler() {
-			int totalLines = 0;
-			int pageCounter = 0;
+	public void testOneLineThenCallClose() {
+		InputStream inStream = new ByteArrayInputStream("1st line".getBytes());
+		final ArrayList<Integer> closeCallCounter = new ArrayList<>();
+		closeCallCounter.add(new Integer(0));
+		MyOutputHandler mockOutputHandler = new MyOutputHandler() {
+			
+			private int lineCounter=0;;
 
 			@Override
-			public void printLine(String line) {
-				totalLines++;
+			public void printLine(String aLine) {
+				this.lineCounter++;
+				
 			}
-
+			
 			@Override
 			public void close() {
-				assertEquals(5, totalLines); // 2 more because "press any key or escape" needs an additional line
-				assertEquals(2, pageCounter);
+				assertEquals(1,lineCounter);;
+				closeCallCounter.set(0, closeCallCounter.get(0)+1);
+				
 			}
-
+			
 			@Override
 			public void clearPage() {
-				pageCounter++;
+			
+				
 			}
-		});
 
-		try {
-			mymore.printAPage(); // only the first time at start, all other pages are triggered by keyevents
-			mymore.handle(new KeyEvent(null, teststring, teststring, KeyCode.SPACE, false, false, false, false));
-			mymore.handle(new KeyEvent(null, teststring, teststring, KeyCode.A, false, false, false, false));
-			mymore.handle(new KeyEvent(null, teststring, teststring, KeyCode.ESCAPE, false, false, false, false));
-			inStream.close();
-		} catch (IOException e) {
-			fail("exception" + e.getMessage());
-		}
+			
+		}; 
+		
+		MyMore myMore = new MyMore(inStream,mockOutputHandler,1);
+		myMore.printAPage();
+		myMore.handle(escKey);
+		
+		//assertEquals(1,mockOutputHandler.getLinesCounter());
+		assertEquals((Integer)1,closeCallCounter.get(0));
+	}
+	@Test
+	public void test4LinesOn2PagesThenCallClose() {
+		InputStream inStream = this.getClass().getClassLoader().getResourceAsStream("mytest.txt");
+		final ArrayList<Integer> closeCallCounter = new ArrayList<>();
+		closeCallCounter.add(new Integer(0));
+		MyOutputHandler mockOutputHandler = new MyOutputHandler() {
+			
+			private int lineCounter=0;
+			private int pageCounter=0;
 
+			@Override
+			public void printLine(String aLine) {
+				this.lineCounter++;
+				
+			}
+			
+			@Override
+			public void close() {
+				assertEquals(4,lineCounter);
+				assertEquals(1,pageCounter);
+				closeCallCounter.set(0, closeCallCounter.get(0)+1);
+				
+			}
+			
+			@Override
+			public void clearPage() {
+				this.pageCounter++;
+				
+				
+			}
+
+		
+		}; 
+		
+		MyMore myMore = new MyMore(inStream,mockOutputHandler,3);
+		myMore.printAPage();
+		myMore.handle(nonEscKey);
+		
+		myMore.handle(escKey);
+		
+		
+		assertEquals((Integer)1,closeCallCounter.get(0));
 	}
 
 }

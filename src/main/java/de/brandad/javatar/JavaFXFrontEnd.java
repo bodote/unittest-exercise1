@@ -1,76 +1,45 @@
 package de.brandad.javatar;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
-public class JavaFXFrontEnd extends Application implements MyOutputHandler {
-	TextArea textArea;
-	MyMore mymore;
-	Stage primaryStage;
-	InputStream fileinstream;
-	Logger logger = Logger.getLogger(this.getClass().getName());
-	@Override
-	public void start(Stage stage) throws Exception {
-		try {
-			LogManager.getLogManager().readConfiguration(this.getClass().getClassLoader().getResourceAsStream("logging.properties"));
-		} catch (SecurityException | IOException e) {
-			logger.severe(e.getMessage());
-		}
-		// boilerplate code for javafx:
-		this.primaryStage = stage;
-		primaryStage.setTitle("MyMore");
-		textArea = new TextArea("hallo text");
-		textArea.setEditable(false);
-		Scene scene = new Scene(textArea, 400, 400);
-		primaryStage.setScene(scene);
-
-		// my actual code
-		setupMyMore();
-		// boilerplate code again:
-		primaryStage.show();
-	}
-
-	private void setupMyMore() throws FileNotFoundException, IOException {
-		fileinstream = this.getClass().getClassLoader().getResourceAsStream("test.txt");
-		mymore = new MyMore(fileinstream, 5, this);
-		textArea.setOnKeyPressed(mymore::handle);
-		mymore.printAPage();
-	}
-
+public class JavaFXFrontEnd extends Application implements MyOutputHandler{
 	public static void main(String[] args) {
-		Application.launch(args);
+		launch(args);
 	}
-
-	@Override // implements InputOutputHandler
-	public void printLine(String line) {
-		textArea.setText(textArea.getText() + line + "\n");
+	private Stage primaryStage;
+	private TextArea textArea;
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		this.primaryStage = primaryStage;
+		this.textArea = new TextArea();
+		this.textArea.setEditable(false);
+		this.primaryStage.setScene(new Scene(this.textArea));
+		this.primaryStage.show();
+		InputStream inStream = this.getClass().getClassLoader().getResourceAsStream("mytest.txt");
+		MyMore myMore = new MyMore(inStream,this,3);
+		myMore.printAPage();
+		this.textArea.setOnKeyPressed(myMore::handle);
+		
 	}
-
-	@Override // implements InputOutputHandler
-	public void close() {
-		try {
-			fileinstream.close();
-			javafx.application.Platform.exit();
-		} catch (Exception e) {
-
-			e.printStackTrace();
-		}
+	@Override
+	public void printLine(String aLine) {
+		this.textArea.appendText(aLine+"\n");
+		
 	}
-
-	@Override // implements InputOutputHandler
+	@Override
 	public void clearPage() {
-		textArea.setText("");
-
+		this.textArea.clear();
+		
+	}
+	@Override
+	public void close() {
+		this.primaryStage.close();
+		
 	}
 
 }

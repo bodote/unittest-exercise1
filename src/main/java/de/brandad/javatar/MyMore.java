@@ -1,58 +1,53 @@
 package de.brandad.javatar;
 
 import java.io.BufferedReader;
-
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
 
-import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-public class MyMore implements EventHandler<KeyEvent>{
+public class MyMore {
 
-	private BufferedReader bufferedReader;
-	private MyOutputHandler inOutHandler;
+	private BufferedReader reader;
+	private MyOutputHandler outputHandler;
 	private int linesPerPage;
-	
-	Logger logger = Logger.getLogger(this.getClass().getName());
+	private int lineCounter;
 
-	public MyMore(InputStream inStream, int linesPerPage, MyOutputHandler inOutHandler) {
-		this.bufferedReader = new BufferedReader(new InputStreamReader(inStream));
-		this.inOutHandler = inOutHandler;
+	public MyMore(InputStream inStream, MyOutputHandler outputHandler, int linesPerPage) {
+		this.reader = new BufferedReader(new InputStreamReader(inStream));
+		this.outputHandler = outputHandler;
 		this.linesPerPage = linesPerPage;
-		
 	}
 
-	public void printAPage() throws IOException {
-		String line = null;
-		int lineCounter = 1;
-		while (lineCounter <= this.linesPerPage && (line = bufferedReader.readLine()) != null ) {
-			if (lineCounter == 1)  inOutHandler.clearPage();
-			inOutHandler.printLine(line);
-			lineCounter++;
-		}
-		if (lineCounter != 1) inOutHandler.printLine("press any key or escape");
-	}
-	@Override
-	public void handle(KeyEvent event) {
-		logger.fine("keyEvent.code:" + event.getCode());
+	public void printAPage() {
 		try {
-			if (event.getCode() == KeyCode.ESCAPE) {
-				inOutHandler.close();
-			} else {
-				printAPage();
+			if (this.lineCounter == this.linesPerPage) {
+				outputHandler.clearPage();
+				lineCounter = 0;
 			}
-		} catch (Exception e) {
-			inOutHandler.printLine("exeption:"+e.getMessage());
+
+			String aLine = null;
+			while (lineCounter < this.linesPerPage && (aLine = reader.readLine()) != null) {
+				outputHandler.printLine(aLine);
+				this.lineCounter++;
+			}
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+			outputHandler.printLine(e.toString());
 		}
-		
+
 	}
 
-	
+	public void handle(KeyEvent escKey) {
+		if (escKey.getCode() != KeyCode.ESCAPE)
+			printAPage();
+		else
+			this.outputHandler.close();
+
+	}
 
 }
