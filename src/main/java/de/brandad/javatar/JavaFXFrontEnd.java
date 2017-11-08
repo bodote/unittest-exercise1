@@ -20,7 +20,7 @@ public class JavaFXFrontEnd extends Application implements MyOutputHandler{
 		this.textArea.setEditable(false);
 		this.primaryStage.setScene(new Scene(this.textArea));
 		this.primaryStage.show();
-		InputStream inStream = this.getClass().getClassLoader().getResourceAsStream("mytest.txt");
+		InputStream inStream = this.getClass().getClassLoader().getResourceAsStream("mytest2.txt");
 		MyMore myMore = new MyMore(inStream,this,3);
 		myMore.printAPage();
 		this.textArea.setOnKeyPressed(myMore::handle);
