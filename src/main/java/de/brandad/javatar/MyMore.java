@@ -22,7 +22,7 @@ public class MyMore {
 		printAPage();
 	}
 
-	public void printAPage() {
+	private void printAPage() {
 		try {
 			int lineCounter = 0;
 			String aLine = null;
