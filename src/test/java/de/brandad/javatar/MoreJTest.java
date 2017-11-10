@@ -20,7 +20,7 @@ public class MoreJTest {
 		InputStream inStream = new ByteArrayInputStream("1st line".getBytes());
 		final HashMap<counterName,Integer> counter = new HashMap<>();
 		counter.put(counterName.closeCalls,new Integer(0));
-		MyOutputHandler mockOutputHandler = new MyOutputHandler() {
+		MyOutputHandler mockOutputHandler = new MyOutputHandler() { 
 			
 			private int linecounter=0;;
 
