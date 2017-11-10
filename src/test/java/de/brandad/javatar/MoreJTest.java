@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.junit.Test;
 
@@ -13,26 +14,26 @@ import javafx.scene.input.KeyEvent;
 public class MoreJTest {
 	KeyEvent escKey = new KeyEvent(null, null, null, null, null, KeyCode.ESCAPE, false, false,false, false);
     KeyEvent nonEscKey = new KeyEvent(null, null, null, null, null, KeyCode.SPACE, false, false,false, false);
-	
+	enum counterName { closeCalls };
 	@Test
 	public void testOneLineThenCallClose() {
 		InputStream inStream = new ByteArrayInputStream("1st line".getBytes());
-		final ArrayList<Integer> closeCallCounter = new ArrayList<>();
-		closeCallCounter.add(new Integer(0));
+		final HashMap<counterName,Integer> counter = new HashMap<>();
+		counter.put(counterName.closeCalls,new Integer(0));
 		MyOutputHandler mockOutputHandler = new MyOutputHandler() {
 			
-			private int lineCounter=0;;
+			private int linecounter=0;;
 
 			@Override
 			public void printLine(String aLine) {
-				this.lineCounter++;
+				this.linecounter++;
 				
 			}
 			
 			@Override
 			public void close() {
-				assertEquals(1,lineCounter);;
-				closeCallCounter.set(0, closeCallCounter.get(0)+1);
+				assertEquals(1,linecounter);;
+				counter.put(counterName.closeCalls, counter.get(counterName.closeCalls)+1);
 				
 			}
 			
@@ -49,36 +50,36 @@ public class MoreJTest {
 		
 		myMore.handle(escKey);
 		
-		//assertEquals(1,mockOutputHandler.getLinesCounter());
-		assertEquals((Integer)1,closeCallCounter.get(0));
+		//assertEquals(1,mockOutputHandler.getLinescounter());
+		assertEquals((Integer)1,counter.get(counterName.closeCalls));
 	}
 	@Test
 	public void test4LinesOn2PagesThenCallClose() {
 		InputStream inStream = this.getClass().getClassLoader().getResourceAsStream("mytest.txt");
-		final ArrayList<Integer> closeCallCounter = new ArrayList<>();
-		closeCallCounter.add(new Integer(0));
+		final HashMap<counterName,Integer> counter = new HashMap<>();
+		counter.put(counterName.closeCalls,new Integer(0));
 		MyOutputHandler mockOutputHandler = new MyOutputHandler() {
 			
-			private int lineCounter=0;
-			private int pageCounter=0;
+			private int linecounter=0;
+			private int pagecounter=0;
 
 			@Override
 			public void printLine(String aLine) {
-				this.lineCounter++;
+				this.linecounter++;
 				
 			}
 			
 			@Override
 			public void close() {
-				assertEquals(4,lineCounter);
-				assertEquals(1,pageCounter);
-				closeCallCounter.set(0, closeCallCounter.get(0)+1);
+				assertEquals(4,linecounter);
+				assertEquals(1,pagecounter);
+				counter.put(counterName.closeCalls, counter.get(counterName.closeCalls)+1);
 				
 			}
 			
 			@Override
 			public void clearPage() {
-				this.pageCounter++;
+				this.pagecounter++;
 				
 				
 			}
@@ -93,7 +94,7 @@ public class MoreJTest {
 		myMore.handle(escKey);
 		
 		
-		assertEquals((Integer)1,closeCallCounter.get(0));
+		assertEquals((Integer)1,counter.get(counterName.closeCalls));
 	}
 
 }
