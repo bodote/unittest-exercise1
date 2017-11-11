@@ -1,3 +1,4 @@
+
 # Exercise on unit testing and using interfaces for...
 - ... separating logic from the UI,
 - for using a mock objects for testing,
@@ -8,22 +9,25 @@
 
 # "jmore": 
 - implement the core functions of the Unix command line tool "more" in java, with no extras.
-- it should read a  text from an "InputStream".
+- the class should read a  text from an "InputStream".
 - the "lines per page" are given on initialization 
 - if sample text has more lines than "lines_per_page" , then "jmore" should print at most "lines_per_page" the text lines from the InputStream on the screen
-- then wait for a "KeyEvent"  
-- if ESC is pressed, the tool exits
-- if any other key, the screen is cleared an the next "lines_per_page" are printed on the screen .
-- an so on until end of input stream is reached 
+- then wait for a "KeyEvent"  (use javafx.scene.input.KeyEvent)
+- if KeyEvent.getKeyCode() == KeyCode.ESC is pressed, the tool exits 
+- if any other key is pressed , the screen is cleared an the next "lines_per_page" are printed on the screen .
+- an so on until end of input stream is reached.
+- exit only if KeyEvent.getKeyCode() == KeyCode.ESC event comes in , otherwise just wait
 
-## Important note on  handling key events: 
-- not possible in plain Java using default library for any text-terminals like Windows "cmd" or Unix "xterm" or "bash"
-- therefore you need to use JavaFX or Swing or AWT. JavaFX is the most modern one.
-- the JavaFX front end must not contain any logic or loops, just glue - code!
--  all logic goes in to a java class that is fully independent from any user interface.
-- only this user interface independent class should be unit tested.
-- nevertheless give a text hint at the end of each page, what the user can do, what key does what of if the EOF is reached.
-- DO NOT write a event loop to handle KeyEvents for yourself, use an "event handler" also called a  "call back" method instead. the event loop is internal to JavaFX/Swing/AWT.
+## Important note on the User Interface : 
+- handling keyboard events is NOT possible in plain Java using default java-libraries for any text-terminals like Windows "cmd" or Unix "xterm" or "bash"
+- therefore you need to use **JavaFX** or Swing or AWT. **JavaFX** is the most modern one.
+- the JavaFX front end MUST NOT contain any logic or loops, just glue - code!
+- all logic goes in to a java class that is fully independent from any user interface.
+- only the  user interface independent class(es) should be unit tested, not the JavaFX - UI
+- nevertheless optionally give a text hint at the end of each page, what the user can do, what key does what of if the EOF is reached.
+- DO NOT write a event loop to handle KeyEvents for yourself, use an "event handler" also called a  "call back" method instead. the actual event loop is internal to JavaFX/Swing/AWT.
+- in the JavaFX FrontEnd instantiate an InputStream simply from this.getClass().getClassLoader().getResource("mytest.txt"); 
+
 
 # UNIT TEST - FIRST !
 - strictly write the test first , then the implementation. 
