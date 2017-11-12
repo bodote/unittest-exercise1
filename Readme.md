@@ -7,34 +7,35 @@
 # Idea is..
 ..to practice the exercise several times until you can write down a clean solution very fast without googling 
 
-# "jmore": 
+( lets get started with the description of the task: )
+# ReWrite "More" in Java using "test-first" unit tests and implement a JavaFX UI: 
 - implement the core functions of the Unix command line tool "more" in java, with no extras.
 - the class should read a  text from an "InputStream".
-- the "lines per page" are given on initialization 
-- if sample text has more lines than "lines_per_page" , then "jmore" should print at most "lines_per_page" the text lines from the InputStream on the screen
+- the "lines per page" are given on initialization and can be hard coded in your test or UI,  for example use "3"
+- if the sample text has more lines than "lines_per_page" given, then "jmore" should print at most the given maximum "lines_per_page"  from the InputStream in the window
 - then wait for a "KeyEvent"  (use javafx.scene.input.KeyEvent)
-- if KeyEvent.getKeyCode() == KeyCode.ESC is pressed, the tool exits 
-- if any other key is pressed , the screen is cleared an the next "lines_per_page" are printed on the screen .
-- an so on until end of input stream is reached.
-- exit only if KeyEvent.getKeyCode() == KeyCode.ESC event comes in , otherwise just wait
+- if KeyEvent.getKeyCode() == KeyCode.ESC is pressed, the program should exit 
+- if any other key is pressed , the window  should be  cleared and the next page should be printed on the window .
+- an so on until the end of input stream is reached.
+- program should exit only if KeyEvent.getKeyCode() == KeyCode.ESC  , otherwise it should just wait
 
-## Important note on the User Interface : 
+##  A Important note on the User Interface : 
 - handling keyboard events is NOT possible in plain Java using default java-libraries for any text-terminals like Windows "cmd" or Unix "xterm" or "bash"
-- therefore you need to use **JavaFX** or Swing or AWT. **JavaFX** is the most modern one.
-- the JavaFX front end MUST NOT contain any logic or loops, just glue - code!
-- all logic goes in to a java class that is fully independent from any user interface.
-- only the  user interface independent class(es) should be unit tested, not the JavaFX - UI
-- nevertheless optionally give a text hint at the end of each page, what the user can do, what key does what of if the EOF is reached.
-- DO NOT write a event loop to handle KeyEvents for yourself, use an "event handler" also called a  "call back" method instead. the actual event loop is internal to JavaFX/Swing/AWT.
-- in the JavaFX FrontEnd instantiate an InputStream simply from this.getClass().getClassLoader().getResource("mytest.txt"); 
+- therefore you need to use **JavaFX** or Swing or AWT. **JavaFX** is the most modern one. therefore we will use that.
+- the JavaFX front end MUST NOT contain any logic or loops, just instantiation  and glue - code!
+- all logic goes in to one java class called "jmore" that should be  fully independent from any user interface libraries.
+- only this  user interface independent class should be unit tested, not the JavaFX - UI
 
+- DO NOT write a event loop to handle KeyEvents for yourself, use an "event handler" also called a  "call back" method instead. the actual event loop is already build-into  JavaFX/Swing/AWT.
+- in the JavaFX FrontEnd instantiate an InputStream simply from this.getClass().getClassLoader().getResourceAsStream("mytest.txt"); 
+- (optionally you can print a hint as an additional text-line  at the  bottom of each page, that explains the  key-commands to the user.)
 
 # UNIT TEST - FIRST !
-- strictly write the test first , then the implementation. 
-- implement the JavaFX user interface not before all test are complete and running.
+- strictly write the tests first , then the implementation. 
+- implement the JavaFX user interface not before all test plus the implementation are complete and running.
 
 # Only use Java build-in libraries plus JUnit, nothing else
-
+----------------------------
 # Solution should start from command line like this: 
 - java -cp build/libs/unittest-exercise1.jar de.brandad.javatar.JavaFXFrontEnd
 
